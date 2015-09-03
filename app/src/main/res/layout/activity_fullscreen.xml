@@ -70,7 +70,9 @@
         android:elegantTextHeight="true"
         android:editable="true"
         android:paddingLeft="2dp"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="150dp"
