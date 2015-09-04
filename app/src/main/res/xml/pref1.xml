@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen android:key="SecondPrefScreen"
+        android:title="VLC" android:summary="Account settings">
+        <EditTextPreference
+            android:key="address1"
+            android:title="@string/edittext1_title"
+            android:summary="@string/edittext1_summary">
+        </EditTextPreference>
+        <EditTextPreference
+            android:key="password1"
+            android:title="@string/edittext2_title"
+            android:inputType="textPassword">
+        </EditTextPreference>
+    </PreferenceScreen>
+</PreferenceScreen>
