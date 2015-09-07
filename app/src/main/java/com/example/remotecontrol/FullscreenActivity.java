@@ -56,7 +56,7 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
     private Button myButton9;
     private Button myButton10;
     private TextView mTextView;
-    private TextView mTextView2;
+//    private TextView mTextView2;
 
     private Handler mHandler = new Handler();
     private RequestQueue queue;
@@ -278,7 +278,7 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
         mSeekBar = (SeekBar) findViewById(R.id.seekBar);
         mVolumeBar = (SeekBar) findViewById(R.id.seekBar2);
         mTextView = (TextView) findViewById(R.id.textView);
-        mTextView2 = (TextView) findViewById(R.id.textView2);
+//        mTextView2 = (TextView) findViewById(R.id.textView2);
 
         queue = Volley.newRequestQueue(this);
 
