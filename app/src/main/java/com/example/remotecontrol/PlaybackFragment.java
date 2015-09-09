@@ -1,31 +1,19 @@
 package com.example.remotecontrol;
 
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -41,7 +29,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FullscreenActivity extends Activity implements View.OnClickListener {
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class PlaybackFragment extends Fragment implements View.OnClickListener {
+    private FragmentActivity    faActivity;
+
 
     private SeekBar mSeekBar;
     private SeekBar mVolumeBar;
@@ -220,7 +222,7 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
                 send_request(url + "?command=pl_pause");
                 break;
             case R.id.button3:
-                Intent intent = new Intent(this, mPrefsFragment.class);
+                Intent intent = new Intent(faActivity, mPrefsFragment.class);
                 startActivity(intent);
                 break;
             case R.id.button4:
@@ -258,29 +260,30 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
         }
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        enableStrictMode(this);
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_fullscreen);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        faActivity  = (FragmentActivity)    super.getActivity();
+        View rootView = inflater.inflate(R.layout.fragment_playback, container, false);
 
-        myButton = (Button) findViewById(R.id.button);
-        myButton2 = (Button) findViewById(R.id.button2);
-        myButton3 = (Button) findViewById(R.id.button3);
-        myButton4 = (Button) findViewById(R.id.button4);
-        myButton5 = (Button) findViewById(R.id.button5);
-        myButton6 = (Button) findViewById(R.id.button6);
-        myButton7 = (Button) findViewById(R.id.button7);
-        myButton8 = (Button) findViewById(R.id.button8);
-        myButton9 = (Button) findViewById(R.id.button9);
-        myButton10 = (Button) findViewById(R.id.button10);
-        mSeekBar = (SeekBar) findViewById(R.id.seekBar);
-        mVolumeBar = (SeekBar) findViewById(R.id.seekBar2);
-        mTextView = (TextView) findViewById(R.id.textView);
-        mTextView2 = (TextView) findViewById(R.id.textView2);
 
-        queue = Volley.newRequestQueue(this);
+        myButton = (Button) rootView.findViewById(R.id.button);
+        myButton2 = (Button) rootView.findViewById(R.id.button2);
+        myButton3 = (Button) rootView.findViewById(R.id.button3);
+        myButton4 = (Button) rootView.findViewById(R.id.button4);
+        myButton5 = (Button) rootView.findViewById(R.id.button5);
+        myButton6 = (Button) rootView.findViewById(R.id.button6);
+        myButton7 = (Button) rootView.findViewById(R.id.button7);
+        myButton8 = (Button) rootView.findViewById(R.id.button8);
+        myButton9 = (Button) rootView.findViewById(R.id.button9);
+        myButton10 = (Button) rootView.findViewById(R.id.button10);
+        mSeekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
+        mVolumeBar = (SeekBar) rootView.findViewById(R.id.seekBar2);
+        mTextView = (TextView) rootView.findViewById(R.id.textView);
+        mTextView2 = (TextView) rootView.findViewById(R.id.textView2);
+
+        queue = Volley.newRequestQueue(faActivity);
 
         myButton.setOnClickListener(this);
         myButton2.setOnClickListener(this);
@@ -293,7 +296,7 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
         myButton9.setOnClickListener(this);
         myButton10.setOnClickListener(this);
 
-        mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        mSettings = PreferenceManager.getDefaultSharedPreferences(faActivity);
         updateProgressBar();
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -332,10 +335,6 @@ public class FullscreenActivity extends Activity implements View.OnClickListener
                 stopUpdateVolumeBar = false;
             }
         });
-    }
-    @Override
-    public void onResume(){
-        super.onResume();
-        mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        return rootView;
     }
 }
