@@ -66,6 +66,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     private List<String> mAudioArray = new ArrayList<>();
     private SharedPreferences mSettings;
 
+
     private String url;
     private String mBytes;
     private int icp = 0;
