@@ -1,7 +1,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="@drawable/redox_01"
+    android:layout_height="match_parent" android:background="#ebebeb"
     tools:context=".PaybackFragment"
     android:id="@+id/relativelayout">
 
@@ -22,7 +22,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:background="@drawable/icon1"
+        android:background="@drawable/settings_vector"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp" />
 
@@ -32,7 +32,7 @@
         android:layout_height="80dp"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="@android:drawable/ic_media_play"
+        android:background="@drawable/play_vector"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/seekBar"
         android:layout_alignParentStart="false"
@@ -56,7 +56,7 @@
         android:layout_height="60dp"
         android:id="@+id/button5"
         android:layout_gravity="left|bottom"
-        android:background="@android:drawable/ic_media_previous"
+        android:background="@drawable/skip_previous_vector"
         android:layout_alignBaseline="@+id/button2"
         android:layout_margin="30dp"
         android:layout_alignParentEnd="false"
@@ -70,7 +70,7 @@
         android:layout_height="60dp"
         android:id="@+id/button6"
         android:layout_gravity="right|bottom"
-        android:background="@android:drawable/ic_media_next"
+        android:background="@drawable/skip_next_vector"
         android:layout_alignParentStart="false"
         android:layout_alignBaseline="@+id/button2"
         android:layout_alignParentEnd="false"

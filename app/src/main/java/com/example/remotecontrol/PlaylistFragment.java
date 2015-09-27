@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class PlaylistFragment extends Fragment {
 
 
     public static TextView myTextView3;
+    public static ProgressBar myProgressBar;
     private FragmentActivity    faActivity;
     private RequestQueue queue;
     private SharedPreferences mSettings;
@@ -81,6 +83,7 @@ public class PlaylistFragment extends Fragment {
         mSettings = PreferenceManager.getDefaultSharedPreferences(faActivity);
         queue = Volley.newRequestQueue(faActivity);
         myTextView3 = (TextView) rootView.findViewById(R.id.textView3);
+//        myProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         send_request("http://192.168.0.65:8080/requests/playlist.json");
 

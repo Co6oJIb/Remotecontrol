@@ -1,11 +1,9 @@
 package com.example.remotecontrol;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -118,31 +116,18 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     public int getInt(String s){
         return Integer.parseInt(s.replaceAll("[\\D]", ""));
     }
-    public static void enableStrictMode(Context context) {
-        StrictMode.setThreadPolicy(
-                new StrictMode.ThreadPolicy.Builder()
-                        .detectDiskReads()
-                        .detectDiskWrites()
-                        .detectNetwork()
-                        .penaltyLog()
-                        .build());
-        StrictMode.setVmPolicy(
-                new StrictMode.VmPolicy.Builder()
-                        .detectLeakedSqlLiteObjects()
-                        .penaltyLog()
-                        .build());
-    }
+
     public void mParseJSON(String mResponse) {
         try {
             JSONObject mjObject1 = new JSONObject(mResponse);
             if (mjObject1.getString("state").matches("playing")){
-                myButton2.setBackgroundResource(android.R.drawable.ic_media_pause);
+                myButton2.setBackgroundResource(R.drawable.pause_vector);
             }
             else if (mjObject1.getString("state").matches("paused")){
-                myButton2.setBackgroundResource(android.R.drawable.ic_media_play);
+                myButton2.setBackgroundResource(R.drawable.play_vector);
             }
             else {
-                myButton2.setBackgroundResource(android.R.drawable.ic_media_play);
+                myButton2.setBackgroundResource(R.drawable.play_vector);
                 mTextView.setText("--:--:--" + " / " + "--:--:--");
                 icp = 0;
                 mSeekBar.setProgress(0);
@@ -187,7 +172,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                myButton2.setBackgroundResource(android.R.drawable.ic_media_play);
+                myButton2.setBackgroundResource(R.drawable.play_vector);
                 mTextView.setText("--:--:--" + " / " + "--:--:--");
             }
         }) {
