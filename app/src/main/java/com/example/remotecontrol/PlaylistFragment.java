@@ -2,19 +2,29 @@ package com.example.remotecontrol;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Base64;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,16 +54,65 @@ import java.util.regex.Pattern;
 public class PlaylistFragment extends Fragment {
 
 
-    public static TextView myTextView3;
+//    public static TextView myTextView3;
     private List<String> mPLArray = new ArrayList<>();
 //    private List<String> mFilesArray = new ArrayList<>();
     private JSONObject mSubJObject = new JSONObject();
     public static ProgressBar myProgressBar;
     private FragmentActivity    faActivity;
+    private TableLayout myTable;
     private RequestQueue queue;
     private SharedPreferences mSettings;
     private String mBytes;
 
+    public static int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public void drawPL(List mPL) {
+        myTable.removeAllViews();
+        int myWidth = myTable.getWidth();
+        String mName = "";
+        for (int i = 0; i < mPL.size(); i++ ) {
+            try {
+                mName = new String(mPL.get(i).toString().getBytes("ISO-8859-1"), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            TableRow row1 = new TableRow(getActivity());
+            row1.setLayoutParams(new TableLayout.LayoutParams(myWidth, dpToPx(80)));
+            row1.setId(9000 + i);
+            myTable.addView(row1);
+
+            RelativeLayout myRLayout = new RelativeLayout(getActivity());
+            myRLayout.setLayoutParams(new TableRow.LayoutParams(myWidth, TableRow.LayoutParams.MATCH_PARENT));
+            row1.addView(myRLayout);
+
+            TextView myTextView1 = new TextView(getActivity());
+            myTextView1.setText(mName);
+            myTextView1.setLayoutParams(new RelativeLayout.LayoutParams(myWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
+            myRLayout.addView(myTextView1);
+            RelativeLayout.LayoutParams rLParams = (RelativeLayout.LayoutParams)myTextView1.getLayoutParams();
+//            rLParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            rLParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            rLParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            rLParams.setMargins(dpToPx(10), dpToPx(10), dpToPx(80), 0);
+            myTextView1.setMaxLines(1);
+            myTextView1.setEllipsize(TextUtils.TruncateAt.END);
+            myTextView1.setTypeface(Typeface.DEFAULT_BOLD);
+
+            View mySeparator = new View(getActivity());
+            mySeparator.setLayoutParams(new TableRow.LayoutParams(myWidth, dpToPx(1)));
+            mySeparator.setBackgroundColor(Color.argb(255, 195, 195, 195));
+            mySeparator.setId(1000 + i);
+
+            myTable.addView(mySeparator);
+        }
+        View myWSpace = new View(getActivity());
+        myWSpace.setLayoutParams(new TableRow.LayoutParams(myWidth, dpToPx(60)));
+        myTable.addView(myWSpace);
+    }
 
     public void mParseJSON_add_files(String mResponse) {
         try {
@@ -79,7 +138,7 @@ public class PlaylistFragment extends Fragment {
             for (int i=0; i<mFilesArray.size(); i++ ) {
                 mFiles = mFiles + "  " + mFilesArray.get(i).toString() + "\n";
             }
-            myTextView3.setText(mDirs + mFiles);
+//            myTextView3.setText(mDirs + mFiles);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -110,10 +169,11 @@ public class PlaylistFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            myTextView3.setText(mName);
+//            myTextView3.setText(mName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        drawPL(mPLArray);
     }
 
     public void send_request(String var_url) {
@@ -156,7 +216,8 @@ public class PlaylistFragment extends Fragment {
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(faActivity);
         queue = Volley.newRequestQueue(faActivity);
-        myTextView3 = (TextView) rootView.findViewById(R.id.textView3);
+        myTable = (TableLayout) rootView.findViewById(R.id.tableLayout2);
+//        myTextView3 = (TextView) rootView.findViewById(R.id.textView3);
 //        myProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         send_request("http://192.168.0.39:8080/requests/playlist.json");

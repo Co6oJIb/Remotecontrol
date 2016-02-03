@@ -8,23 +8,18 @@ xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativelayout">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/scrollView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" >
+        android:focusableInTouchMode="true"
+        android:fillViewport="false">
 
-        <TextView
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/textView3"
-            android:layout_alignParentStart="true"
-            android:textSize="10dp"
-            android:elegantTextHeight="false"
-            android:editable="true"
+            android:id = "@+id/tableLayout2"
             android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true" />
+            android:layout_centerHorizontal="true">
+        </TableLayout>
     </ScrollView>
-
-
 </RelativeLayout>
