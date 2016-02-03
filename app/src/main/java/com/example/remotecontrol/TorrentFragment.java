@@ -266,7 +266,7 @@ public class TorrentFragment extends Fragment {
             }
             myProgressBar.setMax(1001);
             myProgressBar.setProgress(myProgress(i)+1);
-            PlaylistFragment.myTextView3.setText("progress: " + myProgressBar.getProgress() + "\nmyProgress: " + myProgress(i));
+//            PlaylistFragment.myTextView3.setText("progress: " + myProgressBar.getProgress() + "\nmyProgress: " + myProgress(i));
 
             View mySeparator = new View(getActivity());
             mySeparator.setLayoutParams(new TableRow.LayoutParams(myWidth, dpToPx(1)));
