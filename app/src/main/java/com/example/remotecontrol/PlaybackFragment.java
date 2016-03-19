@@ -55,6 +55,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     private Button myButton8;
     private Button myButton9;
     private Button myButton10;
+    private Button myButton15;
+    private Button myButton16;
     private TextView mTextView;
     private TextView mTextView2;
 
@@ -67,6 +69,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
 
     private String url;
     private String mBytes;
+    public static int mIcp;
     private int icp = 0;
     private int imp = 100;
     private int mMaxVolume = 256;
@@ -75,6 +78,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     private int mAudioTrack = 0;
     private boolean stopUpdateBar = false;
     private boolean stopUpdateVolumeBar = false;
+    private boolean loop = true;
+    private boolean shuffle = true;
     private double mSubDelay = 0;
     private double mAudioDelay = 0;
 
@@ -92,6 +97,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
             if (!stopUpdateBar) {
                 send_request(url);
                 int mCurrentPosition = icp;
+                mIcp = icp;
                 int mMaxPosition = imp;
                 mSeekBar.setMax(mMaxPosition);
                 mSeekBar.setProgress(mCurrentPosition);
@@ -156,6 +162,22 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
             set_icp(getInt(cp));
             if (!stopUpdateVolumeBar) {
                 mCurVolume = getInt(mjObject1.getString("volume"));
+            }
+            if (mjObject1.getString("loop").matches("false") && loop) {
+                myButton15.setBackgroundResource(R.drawable.loop_vector_disabled);
+                loop = false;
+            }
+            else if (mjObject1.getString("loop").matches("true") && !loop) {
+                myButton15.setBackgroundResource(R.drawable.loop_vector);
+                loop =true;
+            }
+            if (mjObject1.getString("random").matches("false") && shuffle) {
+                myButton16.setBackgroundResource(R.drawable.shuffle_vector_disabled);
+                shuffle = false;
+            }
+            else if (mjObject1.getString("random").matches("true") && !shuffle) {
+                myButton16.setBackgroundResource(R.drawable.shuffle_vector);
+                shuffle = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -243,6 +265,12 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
                 mAudioDelay = mAudioDelay + 0.5;
                 send_request(url + "?command=audiodelay&val=" + mAudioDelay);
                 break;
+            case R.id.button15:
+                send_request(url + "?command=pl_loop");
+                break;
+            case R.id.button16:
+                send_request(url + "?command=pl_random");
+                break;
         }
     }
 
@@ -264,6 +292,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
         myButton8 = (Button) rootView.findViewById(R.id.button8);
         myButton9 = (Button) rootView.findViewById(R.id.button9);
         myButton10 = (Button) rootView.findViewById(R.id.button10);
+        myButton15 = (Button) rootView.findViewById(R.id.button15);
+        myButton16 = (Button) rootView.findViewById(R.id.button16);
         mSeekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
         mVolumeBar = (SeekBar) rootView.findViewById(R.id.seekBar2);
         mTextView = (TextView) rootView.findViewById(R.id.textView);
@@ -281,6 +311,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
         myButton8.setOnClickListener(this);
         myButton9.setOnClickListener(this);
         myButton10.setOnClickListener(this);
+        myButton15.setOnClickListener(this);
+        myButton16.setOnClickListener(this);
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(faActivity);
         updateProgressBar();

@@ -28,8 +28,8 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal|bottom"
         android:background="@drawable/play_vector"
@@ -52,13 +52,13 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/button5"
         android:layout_gravity="left|bottom"
         android:background="@drawable/skip_previous_vector"
         android:layout_alignBaseline="@+id/button2"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
         android:gravity="center_vertical"
@@ -66,8 +66,8 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/button6"
         android:layout_gravity="right|bottom"
         android:background="@drawable/skip_next_vector"
@@ -78,7 +78,7 @@
         android:layout_toRightOf="@+id/button2"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentRight="false"
-        android:layout_marginLeft="30dp" />
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:layout_width="251dp"
@@ -194,6 +194,24 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:theme="@style/Base.V21.Theme.AppCompat.Light" />
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/button15"
+        android:background="@drawable/loop_vector"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_toRightOf="@+id/button6"
+        android:layout_marginLeft="20dp" />
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/button16"
+        android:background="@drawable/shuffle_vector"
+        android:layout_alignTop="@+id/button5"
+        android:layout_toLeftOf="@+id/button5"
+        android:layout_alignBaseline="@+id/button2" />
 
 
 </RelativeLayout>

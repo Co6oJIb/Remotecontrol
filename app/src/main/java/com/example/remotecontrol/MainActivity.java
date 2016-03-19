@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         return myData;
     }
     // Tab titles
-    private String[] tabs = { "Playback", "Playlist", "Torrnet" };
+    private String[] tabs = { "Playback", "Playlist", "Torrent" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,5 +103,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        super.onDestroy();
     }
 }

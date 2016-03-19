@@ -338,5 +338,4 @@ public class TorrentFragment extends Fragment {
 
         return rootView;
     }
-
 }
