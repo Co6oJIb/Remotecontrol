@@ -112,7 +112,7 @@ public class PlaylistFragment extends Fragment {
             final TextView addPLitemName = (TextView) convertView.findViewById(R.id.textView3);
             // Populate the data into the template view using the data object
             addPLitemName.setText(plitem.name);
-            final String url = "http://192.168.0.39:8080/requests/browse.json?dir=" + plitem.path.replace("file://","");
+            final String url = "http://192.168.88.250:8080/requests/browse.json?dir=" + plitem.path.replace("file://","");
             addPLitemName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,18 +141,18 @@ public class PlaylistFragment extends Fragment {
             JSONArray mjArray = mjObject1.getJSONArray("element");
             for (int i=0; i<mjArray.length(); i++ ) {
                 if (mjArray.getJSONObject(i).getString("type").matches("dir") && !mjArray.getJSONObject(i).getString("name").matches("^..$")) {
-                    String url = "http://192.168.0.39:8080/requests/browse.json?dir=" + mjArray.getJSONObject(i).getString("uri").replace("file://","");
+                    String url = "http://192.168.88.250:8080/requests/browse.json?dir=" + mjArray.getJSONObject(i).getString("uri").replace("file://","");
                     send_request(url, "add_dir");
                 }
                 if (mjArray.getJSONObject(i).getString("type").matches("file")) {
-                    String url = "http://192.168.0.39:8080/requests/status.json?command=in_enqueue&input=" + mjArray.getJSONObject(i).getString("uri");
+                    String url = "http://192.168.88.250:8080/requests/status.json?command=in_enqueue&input=" + mjArray.getJSONObject(i).getString("uri");
                     send_request(url, "playlist");
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        send_request("http://192.168.0.39:8080/requests/playlist.json", "playlist");
+        send_request("http://192.168.88.250:8080/requests/playlist.json", "playlist");
     }
     public void mParseJSON_add_files(String mResponse) {
         try {
@@ -225,7 +225,7 @@ public class PlaylistFragment extends Fragment {
                             mParseJSON_add_dir(response);
                         }
                         if (parse.equals("clear")) {
-                            send_request("http://192.168.0.39:8080/requests/playlist.json", "playlist");
+                            send_request("http://192.168.88.250:8080/requests/playlist.json", "playlist");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -264,7 +264,7 @@ public class PlaylistFragment extends Fragment {
                         if (parse.equals("add_dir")) {
 //                            mParseJSON_add_dir(response);
                         }
-                        send_request("http://192.168.0.39:8080/requests/playlist.json", "playlist");
+                        send_request("http://192.168.88.250:8080/requests/playlist.json", "playlist");
                         mProgressBar.setVisibility(View.GONE);
                         Toast.makeText(faActivity, "Items added to playlist", Toast.LENGTH_LONG).show();
                     }
@@ -327,7 +327,7 @@ public class PlaylistFragment extends Fragment {
                 mEnqueueButton.setVisibility(View.GONE);
                 mPlayButton.setVisibility(View.GONE);
                 mLinearLayout.setVisibility(View.GONE);
-                send_request("http://192.168.0.39:8080/requests/playlist.json", "playlist");
+                send_request("http://192.168.88.250:8080/requests/playlist.json", "playlist");
             }
         });
         mEnqueueButton = (Button) rootView.findViewById(R.id.button13);
@@ -337,16 +337,16 @@ public class PlaylistFragment extends Fragment {
                 mArr.clear();
                 for (int i=0; i<m_items_to_add.size(); i++ ){
                     if (m_items_to_add.get(i).get(1).equals("dir")) {
-//                        String url = "http://192.168.0.39:8080/requests/browse.json?dir=" + m_items_to_add.get(i).get(0).replace("file://","");
+//                        String url = "http://192.168.88.250:8080/requests/browse.json?dir=" + m_items_to_add.get(i).get(0).replace("file://","");
 //                        send_request(url, "add_dir");
                         mArr.add(m_items_to_add.get(i).get(0).replace("file://",""));
                     } else {
-                        String url = "http://192.168.0.39:8080/requests/status.json?command=in_enqueue&input=" + m_items_to_add.get(i).get(0);
+                        String url = "http://192.168.88.250:8080/requests/status.json?command=in_enqueue&input=" + m_items_to_add.get(i).get(0);
                         send_request(url, "playlist");
                     }
                 }
 //                mArr.add("9090909090");
-                String url = "http://192.168.0.39/test.php";
+                String url = "http://192.168.88.250/test.php";
                 send_custom_request(url, "add_dir", mArr);
 
                 m_items_to_add.clear();
@@ -368,7 +368,7 @@ public class PlaylistFragment extends Fragment {
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send_request("http://192.168.0.39:8080/requests/browse.json?dir=/home/co6ojib/media", "add_files");
+                send_request("http://192.168.88.250:8080/requests/browse.json?dir=/home/co6ojib/media", "add_files");
                 mlistView2.setVisibility(View.VISIBLE);
                 mCancelButton.setVisibility(View.VISIBLE);
                 mEnqueueButton.setVisibility(View.VISIBLE);
@@ -380,11 +380,11 @@ public class PlaylistFragment extends Fragment {
         mDelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send_request("http://192.168.0.39:8080/requests/status.json?command=pl_empty", "clear");
+                send_request("http://192.168.88.250:8080/requests/status.json?command=pl_empty", "clear");
             }
         });
-        send_request("http://192.168.0.39:8080/requests/playlist.json", "playlist");
-        send_request("http://192.168.0.39:8080/requests/browse.json?dir=/home/co6ojib/media", "add_files");
+        send_request("http://192.168.88.250:8080/requests/playlist.json", "playlist");
+        send_request("http://192.168.88.250:8080/requests/browse.json?dir=/home/co6ojib/media", "add_files");
 
         return rootView;
 

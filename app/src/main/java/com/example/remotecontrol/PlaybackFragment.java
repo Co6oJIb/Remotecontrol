@@ -27,7 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,14 +63,18 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     private Button myButton10;
     private Button myButton15;
     private Button myButton16;
+    private Button myButton17;
     private TextView mTextView;
     private TextView mTextView2;
+    private TextView mTextView5;
+
 
     private Handler mHandler = new Handler();
     private RequestQueue queue;
     private List<String> mSubArray = new ArrayList<>();
     private List<String> mAudioArray = new ArrayList<>();
     private SharedPreferences mSettings;
+    private SharedPreferences.Editor mEditor;
 
 
     private String url;
@@ -82,6 +92,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     private boolean shuffle = true;
     private double mSubDelay = 0;
     private double mAudioDelay = 0;
+    private boolean powered;
 
     public String convertToTime(int mSeconds) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
@@ -121,6 +132,37 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
     }
     public int getInt(String s){
         return Integer.parseInt(s.replaceAll("[\\D]", ""));
+    }
+
+    public static String getMacFromArpCache(String ip) {
+        if (ip == null)
+            return null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("/proc/net/arp"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] splitted = line.split(" +");
+                if (splitted != null && splitted.length >= 4 && ip.equals(splitted[0])) {
+                    // Basic sanity check
+                    String mac = splitted[3];
+                    if (mac.matches("..:..:..:..:..:..") && !mac.matches("00:00:00:00:00:00")) {
+                        return mac;
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public void mParseJSON(String mResponse) {
@@ -184,24 +226,32 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void send_request(String var_url) {
+    public void send_request(final String var_url) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, var_url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         mParseJSON(response);
+                        myButton17.setBackgroundResource(R.drawable.power_vector);
+                        powered = true;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 myButton2.setBackgroundResource(R.drawable.play_vector);
                 mTextView.setText("--:--:--" + " / " + "--:--:--");
+                myButton17.setBackgroundResource(R.drawable.power_vector_disabled);
+                powered = false;
             }
         }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                mBytes = ":" + mSettings.getString("password1", "");
+                if (var_url.matches("^.*shutdown\\.php")) {
+                    mBytes = "co6ojib:" + mSettings.getString("password1", "");
+                }
+                else
+                    mBytes = ":" + mSettings.getString("password1", "");
                 try {
                     params.put("Authorization", "Basic " + Base64.encodeToString(mBytes.getBytes("UTF-8"), Base64.DEFAULT));
                 } catch (UnsupportedEncodingException e){
@@ -271,6 +321,17 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
             case R.id.button16:
                 send_request(url + "?command=pl_random");
                 break;
+            case R.id.button17:
+                if (powered) {
+                    send_request("http://" + mSettings.getString("address1", "") + "/shutdown.php");
+                } else {
+                    wolAsync wake = new wolAsync();
+                    String[] mIPsplited = mSettings.getString("address1", "").split("\\.");
+                    String mIP = mIPsplited[0] + "." + mIPsplited[1] + "." + mIPsplited[2] + ".255";
+                    String mMAC = mSettings.getString("mac1", "00:00:00:00:00:00");
+                    wake.execute(mMAC, mIP);
+                }
+                break;
         }
     }
 
@@ -294,10 +355,12 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
         myButton10 = (Button) rootView.findViewById(R.id.button10);
         myButton15 = (Button) rootView.findViewById(R.id.button15);
         myButton16 = (Button) rootView.findViewById(R.id.button16);
+        myButton17 = (Button) rootView.findViewById(R.id.button17);
         mSeekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
         mVolumeBar = (SeekBar) rootView.findViewById(R.id.seekBar2);
         mTextView = (TextView) rootView.findViewById(R.id.textView);
         mTextView2 = (TextView) rootView.findViewById(R.id.textView2);
+        mTextView5 = (TextView) rootView.findViewById(R.id.textView5);
 
         queue = Volley.newRequestQueue(faActivity);
 
@@ -313,8 +376,17 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener {
         myButton10.setOnClickListener(this);
         myButton15.setOnClickListener(this);
         myButton16.setOnClickListener(this);
+        myButton17.setOnClickListener(this);
 
         mSettings = PreferenceManager.getDefaultSharedPreferences(faActivity);
+        mEditor = mSettings.edit();
+        String mMAC = getMacFromArpCache(mSettings.getString("address1", ""));
+        if (mMAC != null && !mMAC.isEmpty()) {
+            mEditor.putString("mac1",mMAC);
+            mEditor.commit();
+        }
+
+
         updateProgressBar();
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="#ebebeb"
-    tools:context=".PaybackFragment"
+    tools:context=".PlaybackFragment"
     android:id="@+id/relativelayout">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -212,6 +212,26 @@
         android:layout_alignTop="@+id/button5"
         android:layout_toLeftOf="@+id/button5"
         android:layout_alignBaseline="@+id/button2" />
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/button17"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/power_vector"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/seekBar2"
+        android:layout_marginTop="41dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
